@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Denco | Statistics</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #38bdf8;
+            --text: #f8fafc;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background: var(--card);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            width: 300px;
+        }
+
+        h1 {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+            color: var(--accent);
+        }
+
+        .counter-box {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+
+        .label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .refresh-status {
+            margin-top: 2rem;
+            font-size: 0.7rem;
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Global Stats</h1>
+        <div class="counter-box" id="total-count">...</div>
+        <div class="label">Total Executions</div>
+        <div class="refresh-status" id="status">Updating live...</div>
+    </div>
+
+    <script>
+        // API URL'nizi buraya yazın
+        const API_URL = '/api/counter'; 
+
+        async function updateStats() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                document.getElementById('total-count').innerText = data.total.toLocaleString();
+                document.getElementById('status').innerText = 'Last updated: ' + new Date().toLocaleTimeString();
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('status').innerText = 'Connection error!';
+            }
+        }
+
+        // Sayfa açıldığında ve her 30 saniyede bir güncelle
+        updateStats();
+        setInterval(updateStats, 30000);
+    </script>
+</body>
+</html>
